@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
@@ -77,114 +77,110 @@ input:focus{border-color:var(--blue)}
 <body>
 
 <div class="tabs">
-  <div class="tab on"  onclick="go('home')">首页</div>
-  <div class="tab"     onclick="go('recv')">入库</div>
-  <div class="tab"     onclick="go('issue')">出库</div>
-  <div class="tab"     onclick="go('inv')">库存</div>
-  <div class="tab"     onclick="go('hist')">历史</div>
+  <div class="tab on"  onclick="go('home')">Inicio</div>
+  <div class="tab"     onclick="go('recv')">Entrada</div>
+  <div class="tab"     onclick="go('issue')">Salida</div>
+  <div class="tab"     onclick="go('inv')">Inventario</div>
+  <div class="tab"     onclick="go('hist')">Historial</div>
 </div>
 
-<!-- ══ 首页 ══ -->
+<!-- ══ Inicio ══ -->
 <div class="page on" id="page-home">
   <div class="stat-row" style="margin-top:10px">
-    <div class="stat"><div class="stat-val ok" id="s-total">-</div><div class="stat-lbl">物料种类</div></div>
-    <div class="stat"><div class="stat-val warn" id="s-low">-</div><div class="stat-lbl">低库存预警</div></div>
-    <div class="stat"><div class="stat-val" id="s-moves">-</div><div class="stat-lbl">今日操作</div></div>
+    <div class="stat"><div class="stat-val ok" id="s-total">-</div><div class="stat-lbl">Artículos</div></div>
+    <div class="stat"><div class="stat-val warn" id="s-low">-</div><div class="stat-lbl">Stock bajo</div></div>
+    <div class="stat"><div class="stat-val" id="s-moves">-</div><div class="stat-lbl">Movimientos</div></div>
   </div>
   <div class="card">
-    <div class="card-title">设备信息</div>
+    <div class="card-title">Info del dispositivo</div>
     <div class="info-row"><span class="info-label">JS Bridge</span><span class="info-val" id="h-bridge">-</span></div>
-    <div class="info-row"><span class="info-label">设备型号</span><span class="info-val" id="h-model">-</span></div>
-    <div class="info-row"><span class="info-label">电量</span><span class="info-val" id="h-bat">-</span></div>
-    <div class="info-row"><span class="info-label">网络</span><span class="info-val" id="h-net">-</span></div>
-    <div class="info-row"><span class="info-label">后台地址</span><span class="info-val" id="h-api" style="font-size:11px;word-break:break-all">-</span></div>
+    <div class="info-row"><span class="info-label">Modelo</span><span class="info-val" id="h-model">-</span></div>
+    <div class="info-row"><span class="info-label">Batería</span><span class="info-val" id="h-bat">-</span></div>
+    <div class="info-row"><span class="info-label">Red</span><span class="info-val" id="h-net">-</span></div>
+    <div class="info-row"><span class="info-label">Servidor</span><span class="info-val" id="h-api" style="font-size:11px;word-break:break-all">-</span></div>
   </div>
   <div class="card">
-    <div class="card-title">快捷操作</div>
+    <div class="card-title">Acceso rápido</div>
     <div class="btn-row">
-      <button class="btn btn-green" onclick="go('recv')">＋ 入库</button>
-      <button class="btn btn-red"   onclick="go('issue')">－ 出库</button>
+      <button class="btn btn-green" onclick="go('recv')">＋ Entrada</button>
+      <button class="btn btn-red"   onclick="go('issue')">－ Salida</button>
     </div>
-    <button class="btn btn-gray" style="margin-top:8px" onclick="go('inv')">📦 查看库存</button>
+    <button class="btn btn-gray" style="margin-top:8px" onclick="go('inv')">📦 Ver inventario</button>
   </div>
   <div class="card">
-    <div class="card-title">测试条码（点击复制到扫码框）</div>
+    <div class="card-title">Códigos de prueba (toca para usar)</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px" id="barcodeList"></div>
   </div>
 </div>
 
-<!-- ══ 入库 ══ -->
+<!-- ══ Entrada ══ -->
 <div class="page" id="page-recv">
   <div class="card" style="margin-top:10px">
-    <div class="card-title">扫描条码</div>
-    <div class="scanbox empty" id="r-scanbox" onclick="focusScan('r-bc')">点击此处或扫码枪扫描</div>
-    <input type="text" id="r-bc" placeholder="手动输入条码" oninput="lookupItem('r','recv')" style="display:none">
+    <div class="card-title">Escanear código</div>
+    <div class="scanbox empty" id="r-scanbox" onclick="focusScan('r-bc')">Toca aquí o escanea con el lector</div>
+    <input type="text" id="r-bc" placeholder="Ingresar código manualmente" oninput="lookupItem('r','recv')" style="display:none">
   </div>
   <div class="card" id="r-info" style="display:none">
-    <div class="card-title">物料信息</div>
-    <div class="info-row"><span class="info-label">名称</span><span class="info-val" id="r-name">-</span></div>
-    <div class="info-row"><span class="info-label">货位</span><span class="info-val" id="r-loc">-</span></div>
-    <div class="info-row"><span class="info-label">现有库存</span><span class="info-val" id="r-stock">-</span></div>
+    <div class="card-title">Información del artículo</div>
+    <div class="info-row"><span class="info-label">Nombre</span><span class="info-val" id="r-name">-</span></div>
+    <div class="info-row"><span class="info-label">Ubicación</span><span class="info-val" id="r-loc">-</span></div>
+    <div class="info-row"><span class="info-label">Stock actual</span><span class="info-val" id="r-stock">-</span></div>
   </div>
   <div class="card" id="r-form" style="display:none">
-    <div class="card-title">入库数量</div>
-    <label>数量</label>
+    <div class="card-title">Cantidad de entrada</div>
+    <label>Cantidad</label>
     <input type="number" id="r-qty" value="1" min="1">
     <div class="result" id="r-result"></div>
-    <button class="btn btn-green" onclick="submit('recv')">✓ 确认入库</button>
-    <button class="btn btn-gray"  onclick="clearForm('r')">重置</button>
+    <button class="btn btn-green" onclick="submit('recv')">✓ Confirmar entrada</button>
+    <button class="btn btn-gray"  onclick="clearForm('r')">Limpiar</button>
   </div>
 </div>
 
-<!-- ══ 出库 ══ -->
+<!-- ══ Salida ══ -->
 <div class="page" id="page-issue">
   <div class="card" style="margin-top:10px">
-    <div class="card-title">扫描条码</div>
-    <div class="scanbox empty" id="i-scanbox" onclick="focusScan('i-bc')">点击此处或扫码枪扫描</div>
-    <input type="text" id="i-bc" placeholder="手动输入条码" oninput="lookupItem('i','issue')" style="display:none">
+    <div class="card-title">Escanear código</div>
+    <div class="scanbox empty" id="i-scanbox" onclick="focusScan('i-bc')">Toca aquí o escanea con el lector</div>
+    <input type="text" id="i-bc" placeholder="Ingresar código manualmente" oninput="lookupItem('i','issue')" style="display:none">
   </div>
   <div class="card" id="i-info" style="display:none">
-    <div class="card-title">物料信息</div>
-    <div class="info-row"><span class="info-label">名称</span><span class="info-val" id="i-name">-</span></div>
-    <div class="info-row"><span class="info-label">货位</span><span class="info-val" id="i-loc">-</span></div>
-    <div class="info-row"><span class="info-label">可用库存</span><span class="info-val" id="i-stock">-</span></div>
+    <div class="card-title">Información del artículo</div>
+    <div class="info-row"><span class="info-label">Nombre</span><span class="info-val" id="i-name">-</span></div>
+    <div class="info-row"><span class="info-label">Ubicación</span><span class="info-val" id="i-loc">-</span></div>
+    <div class="info-row"><span class="info-label">Stock disponible</span><span class="info-val" id="i-stock">-</span></div>
   </div>
   <div class="card" id="i-form" style="display:none">
-    <div class="card-title">出库数量</div>
-    <label>数量</label>
+    <div class="card-title">Cantidad de salida</div>
+    <label>Cantidad</label>
     <input type="number" id="i-qty" value="1" min="1">
     <div class="result" id="i-result"></div>
-    <button class="btn btn-red"  onclick="submit('issue')">✓ 确认出库</button>
-    <button class="btn btn-gray" onclick="clearForm('i')">重置</button>
+    <button class="btn btn-red"  onclick="submit('issue')">✓ Confirmar salida</button>
+    <button class="btn btn-gray" onclick="clearForm('i')">Limpiar</button>
   </div>
 </div>
 
-<!-- ══ 库存 ══ -->
+<!-- ══ Inventario ══ -->
 <div class="page" id="page-inv">
   <div class="card" style="margin-top:10px">
-    <input type="text" id="inv-search" placeholder="搜索物料名称或货位…" oninput="renderInv()" style="margin:0">
+    <input type="text" id="inv-search" placeholder="Buscar artículo o ubicación…" oninput="renderInv()" style="margin:0">
   </div>
-  <div class="card" id="inv-list"><div class="empty-hint">加载中...</div></div>
+  <div class="card" id="inv-list"><div class="empty-hint">Cargando...</div></div>
 </div>
 
-<!-- ══ 历史 ══ -->
+<!-- ══ Historial ══ -->
 <div class="page" id="page-hist">
   <div class="card" style="margin-top:10px">
     <div class="btn-row">
-      <button class="btn btn-gray" onclick="loadHist()">刷新</button>
-      <button class="btn btn-red"  onclick="resetData()">重置数据</button>
+      <button class="btn btn-gray" onclick="loadHist()">Actualizar</button>
+      <button class="btn btn-red"  onclick="resetData()">Resetear datos</button>
     </div>
   </div>
-  <div class="card" id="hist-list"><div class="empty-hint">暂无记录</div></div>
+  <div class="card" id="hist-list"><div class="empty-hint">Sin registros</div></div>
 </div>
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = (()=>{
-  const h = location.hostname;
-  if(h==='localhost'||h==='127.0.0.1'||h==='10.0.2.2') return location.origin;
-  return location.origin; // same origin on production server
-})();
+const API = location.origin;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let inventory = [];
@@ -228,7 +224,7 @@ function lookupItem(pfx, op) {
   const bc = document.getElementById(pfx+'-bc').value.trim();
   currentBarcode[pfx] = bc;
   const box = document.getElementById(pfx+'-scanbox');
-  if(!bc){ box.textContent='点击此处或扫码枪扫描'; box.className='scanbox empty'; hideInfo(pfx); return; }
+  if(!bc){ box.textContent='Toca aquí o escanea con el lector'; box.className='scanbox empty'; hideInfo(pfx); return; }
   box.textContent = bc; box.className='scanbox';
   lookupTimer = setTimeout(()=>_fetchItem(pfx, op, bc), 300);
 }
@@ -237,19 +233,19 @@ async function _fetchItem(pfx, op, bc) {
   try {
     const r = await fetch(`${API}/api/item/${bc}`);
     const d = await r.json();
-    if(!r.ok){ showErr(pfx, d.error||'物料未找到'); vibErr(); beepErr(); return; }
+    if(!r.ok){ showErr(pfx, d.error||'Artículo no encontrado'); vibErr(); beepErr(); return; }
     document.getElementById(pfx+'-name').textContent  = d.name;
     document.getElementById(pfx+'-loc').textContent   = d.location;
     const stockEl = document.getElementById(pfx+'-stock');
     stockEl.textContent = `${d.stock} ${d.unit}`;
-    if(d.stock===0)      stockEl.style.color='var(--red)';
+    if(d.stock===0)        stockEl.style.color='var(--red)';
     else if(d.stock<d.min) stockEl.style.color='var(--orange)';
-    else                 stockEl.style.color='var(--green)';
+    else                   stockEl.style.color='var(--green)';
     document.getElementById(pfx+'-info').style.display='block';
     document.getElementById(pfx+'-form').style.display='block';
     document.getElementById(pfx+'-result').className='result';
     vibOk();
-  } catch(e){ showErr(pfx,'网络错误: '+e.message); }
+  } catch(e){ showErr(pfx,'Error de red: '+e.message); }
 }
 
 function hideInfo(pfx){
@@ -262,26 +258,25 @@ async function submit(op) {
   const pfx  = op==='recv'?'r':'i';
   const bc   = currentBarcode[pfx];
   const qty  = parseInt(document.getElementById(pfx+'-qty').value)||0;
-  if(!bc||qty<=0){ showErr(pfx,'请先扫码并输入数量'); return; }
+  if(!bc||qty<=0){ showErr(pfx,'Escanea primero e ingresa la cantidad'); return; }
   try {
     const r = await fetch(`${API}/api/${op}`, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({barcode:bc, qty})
     });
     const d = await r.json();
-    if(!r.ok){ showErr(pfx, d.error||'操作失败'); vibErr(); beepErr(); return; }
-    const typeLabel = op==='recv'?'入库':'出库';
-    showOk(pfx, `${typeLabel}成功 ＋${qty}${' '.repeat(2)}库存: ${d.stock_after}\n单据: ${d.ref}  货位: ${d.location}`);
+    if(!r.ok){ showErr(pfx, d.error||'Error en la operación'); vibErr(); beepErr(); return; }
+    const typeLabel = op==='recv'?'Entrada':'Salida';
+    showOk(pfx, `${typeLabel} registrada +${qty}  Stock: ${d.stock_after}\nDoc: ${d.ref}  Ubic: ${d.location}`);
     vibOk(); beepOk();
-    if(d.low_stock && A) A.showToast && A.showToast('⚠ 库存预警: '+d.name);
+    if(d.low_stock && A) A.showToast && A.showToast('⚠ Stock bajo: '+d.name);
     // ZPL label print (if printer configured)
     if(A && A.printZpl) {
-      const zpl=`^XA^FO30,30^ADN,18,10^FD${typeLabel}: ${d.name}^FS^FO30,60^ADN,14,8^FDBatch: ${d.ref}^FS^FO30,85^ADN,14,8^FDQty: ${qty} Loc: ${d.location}^FS^XZ`;
+      const zpl=`^XA^FO30,30^ADN,18,10^FD${typeLabel}: ${d.name}^FS^FO30,60^ADN,14,8^FDLote: ${d.ref}^FS^FO30,85^ADN,14,8^FDCant: ${qty} Ubic: ${d.location}^FS^XZ`;
       try{ A.printZpl(zpl); }catch(e){}
     }
-    // auto clear after 3s
     setTimeout(()=>clearForm(pfx), 3000);
-  } catch(e){ showErr(pfx,'网络错误: '+e.message); vibErr(); }
+  } catch(e){ showErr(pfx,'Error de red: '+e.message); vibErr(); }
 }
 
 function showOk(pfx, msg) {
@@ -299,7 +294,7 @@ function clearForm(pfx) {
   document.getElementById(pfx+'-bc').value='';
   currentBarcode[pfx]='';
   const box=document.getElementById(pfx+'-scanbox');
-  box.textContent='点击此处或扫码枪扫描'; box.className='scanbox empty';
+  box.textContent='Toca aquí o escanea con el lector'; box.className='scanbox empty';
   hideInfo(pfx);
   document.getElementById(pfx+'-qty').value=1;
 }
@@ -323,7 +318,7 @@ function renderInv() {
     !q || it.name.toLowerCase().includes(q) || it.location.toLowerCase().includes(q)
   );
   const el = document.getElementById('inv-list');
-  if(!filtered.length){ el.innerHTML='<div class="empty-hint">无匹配物料</div>'; return; }
+  if(!filtered.length){ el.innerHTML='<div class="empty-hint">Sin coincidencias</div>'; return; }
   el.innerHTML = filtered.map(it=>`
     <div class="inv-row">
       <span class="inv-loc">${it.location}</span>
@@ -344,22 +339,22 @@ async function loadHist() {
   const mvs = await r.json();
   document.getElementById('s-moves').textContent = mvs.length;
   const el = document.getElementById('hist-list');
-  if(!mvs.length){ el.innerHTML='<div class="empty-hint">暂无操作记录</div>'; return; }
+  if(!mvs.length){ el.innerHTML='<div class="empty-hint">Sin registros</div>'; return; }
   el.innerHTML = mvs.map(m=>`
     <div class="mv">
-      <span class="mv-badge ${m.type==='入库'?'mv-in':'mv-out'}">${m.type}</span>
+      <span class="mv-badge ${m.type==='Entrada'?'mv-in':'mv-out'}">${m.type}</span>
       <div class="mv-info">
         <div class="mv-name">${m.name}</div>
         <div class="mv-meta">${m.ref} · ${m.location} · ${m.time}</div>
       </div>
-      <div class="mv-qty" style="color:${m.type==='入库'?'var(--green)':'var(--red)'}">
-        ${m.type==='入库'?'+':'-'}${m.qty}
+      <div class="mv-qty" style="color:${m.type==='Entrada'?'var(--green)':'var(--red)'}">
+        ${m.type==='Entrada'?'+':'-'}${m.qty}
       </div>
     </div>`).join('');
 }
 
 async function resetData() {
-  if(!confirm('重置所有库存数据？')) return;
+  if(!confirm('¿Resetear todos los datos de inventario?')) return;
   await fetch(`${API}/api/reset`, {method:'POST'});
   await loadInv(); await loadHist();
   vibOk();
@@ -369,9 +364,8 @@ async function resetData() {
 window.addEventListener('load', async ()=>{
   document.getElementById('h-api').textContent = API;
 
-  // JS Bridge
   const hasA = typeof A !== 'undefined';
-  document.getElementById('h-bridge').textContent = hasA ? '已连接 ✓' : '未连接（模拟器）';
+  document.getElementById('h-bridge').textContent = hasA ? 'Conectado ✓' : 'No conectado (simulador)';
   document.getElementById('h-bridge').style.color = hasA ? 'var(--green)' : 'var(--orange)';
 
   if(hasA) {
@@ -385,15 +379,15 @@ window.addEventListener('load', async ()=>{
     }catch(e){}
     try{
       const net = JSON.parse(A.getNetworkStatus());
-      document.getElementById('h-net').textContent = (net.connected?'✓ ':'✗ ')+(net.type||'');
+      document.getElementById('h-net').textContent = (net.connected?'✓ ':'✗ ')+(net.wifi?'WiFi':net.cellular?'Celular':'—');
     }catch(e){}
     if(A.enableScanner) A.enableScanner();
   }
 
   // Barcode shortcuts on homepage
   const barcodes = [
-    ['6901234567890','螺栓'],['6901234567891','轴承'],['6901234567892','密封圈'],
-    ['6901234567893','液压油'],['6901234567894','过滤网'],['6901234567897','控制板'],
+    ['6901234567890','Perno'],['6901234567891','Rodamiento'],['6901234567892','Sello'],
+    ['6901234567893','Aceite'],['6901234567894','Malla'],['6901234567897','Tarjeta'],
   ];
   document.getElementById('barcodeList').innerHTML = barcodes.map(([bc,name])=>
     `<button onclick="useBc('${bc}')" style="background:#161b22;border:1px solid #30363d;color:#58a6ff;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer">${name}</button>`

@@ -4,14 +4,14 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 INITIAL_ITEMS = {
-    "6901234567890": {"name": "螺栓 M8×20mm",   "unit": "EA", "stock": 500, "location": "A-01-01", "min": 100},
-    "6901234567891": {"name": "轴承 SKF 6205",   "unit": "EA", "stock": 100, "location": "B-02-03", "min": 20},
-    "6901234567892": {"name": "密封圈 Φ50mm",    "unit": "EA", "stock": 0,   "location": "A-03-02", "min": 50},
-    "6901234567893": {"name": "液压油 46# 20L",  "unit": "桶", "stock": 30,  "location": "C-01-05", "min": 5},
-    "6901234567894": {"name": "过滤网 200目",    "unit": "张", "stock": 80,  "location": "A-02-04", "min": 30},
-    "6901234567895": {"name": "皮带 B-1500",     "unit": "条", "stock": 15,  "location": "D-01-02", "min": 5},
-    "6901234567896": {"name": "继电器 24V DC",   "unit": "EA", "stock": 45,  "location": "E-03-01", "min": 10},
-    "6901234567897": {"name": "电机控制板 V3",   "unit": "EA", "stock": 8,   "location": "E-01-03", "min": 3},
+    "6901234567890": {"name": "Perno M8×20mm",            "unit": "EA",  "stock": 500, "location": "A-01-01", "min": 100},
+    "6901234567891": {"name": "Rodamiento SKF 6205",       "unit": "EA",  "stock": 100, "location": "B-02-03", "min": 20},
+    "6901234567892": {"name": "Sello O-Ring Φ50mm",        "unit": "EA",  "stock": 0,   "location": "A-03-02", "min": 50},
+    "6901234567893": {"name": "Aceite Hidráulico 46# 20L", "unit": "brl", "stock": 30,  "location": "C-01-05", "min": 5},
+    "6901234567894": {"name": "Malla Filtrante 200#",      "unit": "ud",  "stock": 80,  "location": "A-02-04", "min": 30},
+    "6901234567895": {"name": "Correa B-1500",             "unit": "ud",  "stock": 15,  "location": "D-01-02", "min": 5},
+    "6901234567896": {"name": "Relé 24V DC",               "unit": "EA",  "stock": 45,  "location": "E-03-01", "min": 10},
+    "6901234567897": {"name": "Tarjeta Control Motor V3",  "unit": "EA",  "stock": 8,   "location": "E-01-03", "min": 3},
 }
 
 lock = threading.Lock()
@@ -19,7 +19,7 @@ items = {k: dict(v) for k, v in INITIAL_ITEMS.items()}
 movements = []
 counters = {"GR": 1000, "GI": 2000}
 
-def now_str(): return datetime.now().strftime("%m-%d %H:%M:%S")
+def now_str(): return datetime.now().strftime("%d/%m %H:%M:%S")
 def make_ref(t): counters[t] += 1; return f"{t}-{counters[t]}"
 
 def cors(h):
@@ -60,7 +60,7 @@ class Handler(BaseHTTPRequestHandler):
             bc = p.split("/")[-1]
             with lock: item = items.get(bc)
             if item: send_json(self, {"barcode": bc, **item})
-            else: send_json(self, {"error": "物料未找到"}, 404)
+            else: send_json(self, {"error": "Artículo no encontrado"}, 404)
         elif p == "/api/movements":
             with lock: data = list(reversed(movements[-50:]))
             send_json(self, data)
@@ -74,17 +74,17 @@ class Handler(BaseHTTPRequestHandler):
             bc  = b.get("barcode", "").strip()
             qty = int(b.get("qty", 0))
             if not bc or qty <= 0:
-                return send_json(self, {"error": "条码和数量不能为空"}, 400)
+                return send_json(self, {"error": "Código y cantidad son obligatorios"}, 400)
             with lock:
                 if bc not in items:
-                    return send_json(self, {"error": f"未知物料: {bc}"}, 404)
+                    return send_json(self, {"error": f"Artículo desconocido: {bc}"}, 404)
                 it = items[bc]
                 if p == "/api/issue" and it["stock"] < qty:
-                    return send_json(self, {"error": f"库存不足，现有 {it['stock']} {it['unit']}", "stock": it["stock"]}, 400)
+                    return send_json(self, {"error": f"Stock insuficiente, disponible: {it['stock']} {it['unit']}", "stock": it["stock"]}, 400)
                 it["stock"] += qty if p == "/api/receive" else -qty
                 typ = "GR" if p == "/api/receive" else "GI"
                 ref = make_ref(typ)
-                mv  = {"ref": ref, "type": "入库" if typ=="GR" else "出库",
+                mv  = {"ref": ref, "type": "Entrada" if typ=="GR" else "Salida",
                        "barcode": bc, "name": it["name"], "qty": qty,
                        "location": it["location"], "stock_after": it["stock"], "time": now_str()}
                 movements.append(mv)
@@ -104,5 +104,5 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
-    print(f"WMS Demo → port {port}")
+    print(f"EWR WMS Demo → puerto {port}")
     HTTPServer(("", port), Handler).serve_forever()
